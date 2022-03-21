@@ -96,6 +96,7 @@ export default class Standings extends LightningElement {
                 });
                 // console.log("<------------------>");
                 // console.log("Standing");
+                //sort the array by points
                 teams.sort(function(a, b){
                     return b.Pts - a.Pts;
                 });

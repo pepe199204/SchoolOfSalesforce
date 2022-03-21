@@ -26,12 +26,14 @@ export default class Standings extends LightningElement {
 
     @api recordId;
     //To read Salesforce data, Lightning web components use a reactive wire service. Use @wire in a component’s JavaScript class to specify a Lightning Data Service wire adapter.
+
     @wire(getTeams)
         handleTeams({error, data}) {
             this.data = data;
             teams = new Array();
             if(this.data){
                 //for each team, create a new object
+
                 this.data.forEach(element => {
                     team = new Object();
                     team = {...teamTemplate};
@@ -97,11 +99,11 @@ export default class Standings extends LightningElement {
                 teams.sort(function(a, b){
                     return b.Pts - a.Pts;
                 });
-                // console.table(teams);
-                // console.log("<------------------>");
-                //Settimeout to render the data
-                setTimeout(() => {
-                    //create template literal to render the data
+                Promise.resolve(teams).then(() => {
+                    // console.log("<------------------>");
+
+                    console.log("teams");
+                    console.table(teams);
                     dataTable = `<table class="slds-table slds-table_bordered slds-table_cell-buffer">
                                 <thead>
                                     <tr class="slds-text-title_caps">
@@ -117,28 +119,26 @@ export default class Standings extends LightningElement {
                                             </tr>
                                             </thead>
                                             <tbody>`;
-                    teams.forEach(element => {
-                        index++;
-                        dataTable += `<tr>
-                                        <td>${index}</td>
-                                        <td><a href='https://empathetic-moose-plnz0-dev-ed.lightning.force.com/lightning/r/Account/${element.recordType}/view'>${element.name}</a></td>
-                                        <td>${element.W}</td>
-                                        <td>${element.D}</td>
-                                        <td>${element.L}</td>
-                                        <td>${element.GF}</td>
-                                        <td>${element.GA}</td>
-                                        <td>${element.GD}</td>
-                                        <td>${element.Pts}</td>
-                                    </tr>`;
-                    }
-                );
-                dataTable = dataTable + `</tbody></table>`;
-                
-                this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
-                this.attachmentPoint.innerHTML = dataTable; 
-
-                }, 1000);
-                
+                        teams.forEach(element => {
+                            index++;
+                            dataTable += `<tr>
+                                            <td>${index}</td>
+                                            <td><a href='https://empathetic-moose-plnz0-dev-ed.lightning.force.com/lightning/r/Account/${element.recordType}/view'>${element.name}</a></td>
+                                            <td>${element.W}</td>
+                                            <td>${element.D}</td>
+                                            <td>${element.L}</td>
+                                            <td>${element.GF}</td>
+                                            <td>${element.GA}</td>
+                                            <td>${element.GD}</td>
+                                            <td>${element.Pts}</td>
+                                        </tr>`;
+                        }
+                    );
+                    dataTable = dataTable + `</tbody></table>`;
+                    
+                    this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
+                    this.attachmentPoint.innerHTML = dataTable; 
+                });
                 
             }else if(error){
                 this.error = error;

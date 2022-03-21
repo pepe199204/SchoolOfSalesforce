@@ -102,8 +102,10 @@ export default class Standings extends LightningElement {
                 });
                 //A Promise is an object representing the eventual completion or failure of an asynchronous operation. 
                 Promise.resolve(teams).then(() => {
-                    // console.log("<------------------>");
 
+                    // console.log("<------------------>");
+                    setTimeout(() => {
+                    console.log("loadStanding");
                     console.log("teams");
                     console.table(teams);
                     dataTable = `<table class="slds-table slds-table_bordered slds-table_cell-buffer">
@@ -141,7 +143,8 @@ export default class Standings extends LightningElement {
                     this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
                     this.attachmentPoint.innerHTML = dataTable; 
                 });
-                
+            }, 1000);
+
             }else if(error){
                 this.error = error;
                 this.data = 'undefined';

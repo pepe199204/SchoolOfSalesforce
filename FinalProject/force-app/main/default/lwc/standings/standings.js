@@ -28,7 +28,7 @@ export default class Standings extends LightningElement {
     //To read Salesforce data, Lightning web components use a reactive wire service. Use @wire in a component’s JavaScript class to specify a Lightning Data Service wire adapter.
 
     @wire(getTeams)
-        handleTeams({error, data}) {
+         handleTeams({error, data}) {
             this.data = data;
             teams = new Array();
             if(this.data){
@@ -56,7 +56,7 @@ export default class Standings extends LightningElement {
         }
 
     @wire(getFixtures)
-        handleFixtures({error, data}) {
+     handleFixtures({error, data}) {
             this.data = data;
             fixtures = new Array();
             
@@ -99,6 +99,7 @@ export default class Standings extends LightningElement {
                 teams.sort(function(a, b){
                     return b.Pts - a.Pts;
                 });
+                //
                 Promise.resolve(teams).then(() => {
                     // console.log("<------------------>");
 

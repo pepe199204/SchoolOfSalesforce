@@ -99,7 +99,7 @@ export default class Standings extends LightningElement {
                 teams.sort(function(a, b){
                     return b.Pts - a.Pts;
                 });
-                //
+                //A Promise is an object representing the eventual completion or failure of an asynchronous operation. 
                 Promise.resolve(teams).then(() => {
                     // console.log("<------------------>");
 

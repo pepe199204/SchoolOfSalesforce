@@ -110,6 +110,9 @@ export default class Standings extends LightningElement {
                     return b.Pts - a.Pts;
                 });
                 //A Promise is an object representing the eventual completion or failure of an asynchronous operation. 
+                /*
+                Para resumir, las promesas y async await resuelven la asincronía de distinta forma. Con las promesas no sabemos cuándo se va a resolver y con async await forzamos una espera en la función.
+                */
                     Promise.resolve(teams).then(() => {
 
                         // console.log("<------------------>");

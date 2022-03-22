@@ -28,35 +28,44 @@ export default class Standings extends LightningElement {
     //To read Salesforce data, Lightning web components use a reactive wire service. Use @wire in a component’s JavaScript class to specify a Lightning Data Service wire adapter.
 
     @wire(getTeams)
-         handleTeams({error, data}) {
-            this.data = data;
-            teams = new Array();
-            if(this.data){
-                //for each team, create a new object
+        /*
+        When calling apex methods imperatively in LWC, we mainly go for promises. 
+        */
+        async handleTeams({data}) {
+            try{
+                this.data = data;
+                teams = new Array();
+                if(this.data){
+                    //for each team, create a new object
 
-                this.data.forEach(element => {
-                    team = new Object();
-                    team = {...teamTemplate};
-                    team.recordType = element.Id;
-                    team.name = element.Name;
-                    teams.push(team);
-                });
-                // console.log("<------------------>");
-                // console.log("teams in array");
-                // console.table(teams);
-                // console.log("<------------------>");
-                // season = this.recordId;
-                // console.log("let season  ==> " + season);
-                // console.log("<------------------>");
-            }else if(error){
+                    this.data.forEach(element => {
+                        team = new Object();
+                        team = {...teamTemplate};
+                        team.recordType = element.Id;
+                        team.name = element.Name;
+                        teams.push(team);
+                    });
+                    // console.log("<------------------>");
+                    // console.log("teams in array");
+                    // console.table(teams);
+                    // console.log("<------------------>");
+                    // season = this.recordId;
+                    // console.log("let season  ==> " + season);
+                    // console.log("<------------------>");
+                }
+            }catch(error){
                 this.error = error;
                 this.data = 'undefined';
                 alert(this.error + "Reload the page");
-            }
+            }  
         }
 
     @wire(getFixtures)
-     handleFixtures({error, data}) {
+    /*
+        When calling apex methods imperatively in LWC, we mainly go for promises. 
+        */
+     async handleFixtures({data}) {
+        try{
             this.data = data;
             fixtures = new Array();
             
@@ -101,56 +110,57 @@ export default class Standings extends LightningElement {
                     return b.Pts - a.Pts;
                 });
                 //A Promise is an object representing the eventual completion or failure of an asynchronous operation. 
-                Promise.resolve(teams).then(() => {
+                    Promise.resolve(teams).then(() => {
 
-                    // console.log("<------------------>");
-                    setTimeout(() => {
-                    console.log("loadStanding");
-                    console.log("teams");
-                    console.table(teams);
-                    dataTable = `<table class="slds-table slds-table_bordered slds-table_cell-buffer">
-                                <thead>
-                                    <tr class="slds-text-title_caps">
-                                            <th scope="col">Position</th>
-                                            <th scope="col">Team</th>
-                                            <th scope="col">W</th>
-                                            <th scope="col">D</th>
-                                            <th scope="col">L</th>
-                                            <th scope="col">GF</th>
-                                            <th scope="col">GA</th>
-                                            <th scope="col">GD</th>
-                                            <th scope="col">Pts</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>`;
-                        teams.forEach(element => {
-                            index++;
-                            dataTable += `<tr>
-                                            <td>${index}</td>
-                                            <td><a href='https://empathetic-moose-plnz0-dev-ed.lightning.force.com/lightning/r/Account/${element.recordType}/view'>${element.name}</a></td>
-                                            <td>${element.W}</td>
-                                            <td>${element.D}</td>
-                                            <td>${element.L}</td>
-                                            <td>${element.GF}</td>
-                                            <td>${element.GA}</td>
-                                            <td>${element.GD}</td>
-                                            <td>${element.Pts}</td>
-                                        </tr>`;
-                        }
-                    );
-                    dataTable = dataTable + `</tbody></table>`;
-                    
-                    this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
-                    this.attachmentPoint.innerHTML = dataTable; 
-                });
-            }, 2000);
+                        // console.log("<------------------>");
+                        setTimeout(() => {
+                        console.log("loadStanding");
+                        console.log("teams");
+                        console.table(teams);
+                        dataTable = `<table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                                    <thead>
+                                        <tr class="slds-text-title_caps">
+                                                <th scope="col">Position</th>
+                                                <th scope="col">Team</th>
+                                                <th scope="col">W</th>
+                                                <th scope="col">D</th>
+                                                <th scope="col">L</th>
+                                                <th scope="col">GF</th>
+                                                <th scope="col">GA</th>
+                                                <th scope="col">GD</th>
+                                                <th scope="col">Pts</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>`;
+                            teams.forEach(element => {
+                                index++;
+                                dataTable += `<tr>
+                                                <td>${index}</td>
+                                                <td><a href='https://empathetic-moose-plnz0-dev-ed.lightning.force.com/lightning/r/Account/${element.recordType}/view'>${element.name}</a></td>
+                                                <td>${element.W}</td>
+                                                <td>${element.D}</td>
+                                                <td>${element.L}</td>
+                                                <td>${element.GF}</td>
+                                                <td>${element.GA}</td>
+                                                <td>${element.GD}</td>
+                                                <td>${element.Pts}</td>
+                                            </tr>`;
+                            }
+                        );
+                        dataTable = dataTable + `</tbody></table>`;
+                        
+                        this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
+                        this.attachmentPoint.innerHTML = dataTable; 
+                    },1000);
+            });
 
-            }else if(error){
-                this.error = error;
-                this.data = 'undefined';
-                alert(this.error + "Reload the page");
             }
 
+        }catch(error){
+            this.error = error;
+            this.data = 'undefined';
+            alert(this.error + "Reload the page");
         }
-        
+            
+    }  
 }

@@ -154,7 +154,7 @@ export default class Standings extends LightningElement {
                         
                         this.attachmentPoint = this.template.querySelector('div[ishtmlcontainer=true]');
                         this.attachmentPoint.innerHTML = dataTable; 
-                    },1000);
+                    },2000);
             });
 
             }
